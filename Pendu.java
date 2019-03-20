@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.util.Arrays;
+import java.lang.*;
+
 public class Pendu extends Exception {
     private String word = "";
     private String rightWord = "";
@@ -8,156 +10,177 @@ public class Pendu extends Exception {
 
     public Pendu() {
     }
-    public void checkFail(String str2) {
-        this.word = str2;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the HangMan game, you have 8 attempts to find the word (You can one shot the word ifyou want but only letter no number are allowed) or the man will die.");
-        System.out.println("The word is " + str2.length() + " letters.");
-        while (true) {
 
-            System.out.print("Enter a letter :");
+    public void hangMan(String str2) {
+        this.word = str2;
+        this.letters = str2;
+        int len = str2.length();
+        char[] letterArr = this.letters.toCharArray();
+        char[] str2Arr = str2.toCharArray();
+        for (int i = 0; i < letterArr.length; i++) {
+            letterArr[i] = '-';
+        }
+        Scanner sc = new Scanner(System.in);
+        System.out.println(
+                "Welcome to the HangMan game, you have 8 attempts to find the word after that the man dies.(only letters are allowed)");
+        System.out.println("The word is " + str2.length() + " letters.");
+        System.out.println(String.valueOf(letterArr));
+        while (true) {
+            // get the character or string entered from the user input //
+            System.out.print("Enter a letter: ");
             String str = sc.nextLine();
+            char[] strArr = str.toCharArray();
             str = str.toLowerCase();
-            System.out.println("You chose : " + str);
             try {
-                if (str.length()==0) {
-                 throw new Exception();
+                // checks for empty string //
+                if (str.length() == 0) {
+                    throw new Exception();
                 }
             } catch (Exception e) {
                 System.err.print("Do not enter empty string or you will loose !");
                 break;
             }
             if (Character.isLetter(str.charAt(0))) {
-                if (rightWord.length() > str2.length()) {
-                    System.out.print("---------\n");
-                    System.out.print("|         |\n");
-                    System.out.print("|         |\n");
-                    System.out.print("|         |\n");
-                    System.out.print("|         O\n");
-                    System.out.print("|       --|--\n");
-                    System.out.print("|         |\n");
-                    System.out.print("|        | |\n");
-                    System.out.print("|\n");
-                    System.out.print("|\n");
-                    System.out.print("---------\n");
-                    System.out.println("He's dead well done !");
+                if (str.length() > 1) {
+                    System.out.println("Only one letter is allowed at a time");
                     break;
+                } else {
+                    if (rightWord.length() > str2.length()) {
+                        System.out.print("---------\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         O\n");
+                        System.out.print("|       --|--\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|        | |\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
+                        System.out.println("You failed !");
+                        break;
+                    }
                 }
                 if (str2.contains(str)) {
                     rightWord += str;
-                    System.out.println(rightWord);
-                    if (rightWord.length() != str2.length() ) {
-                        continue;
-                    } else {
-                        rightWord=rightWord.toLowerCase();
-                        str2=str2.toLowerCase();
-                        char[] c1 = rightWord.toCharArray();
-                        char[] c2 = str2.toCharArray();
-                        Arrays.sort(c1);
-                        Arrays.sort(c2);
-                        String sc1 = new String(c1);
-                        String sc2 = new String(c2);
-                        if (sc1.equals(sc2) || sc2.equals(sc1)) {
-                            System.out.println("He lives !");
-                            System.out.println("The word was : " + str2);
-                            break;
+                    // pute the letter in the right place to see the progress of the word
+                    for (int i = 0; i < str2Arr.length; i++) {
+                        if (str2Arr[i] == strArr[0]) {
+                            letterArr[i] = str2Arr[i];
                         }
                     }
+                    System.out.println("\n" + String.valueOf(letterArr) + "\n");
+                    if (String.valueOf(letterArr).length() == str2.length()) {
+                        str2 = str2.toLowerCase();
+                        char[] c2 = str2.toCharArray();
+                        String sc2 = new String(c2);
+                        String sc3 = new String(letterArr);
+                        sc3 = sc3.toLowerCase();
+                        if (sc2.equals(sc3) || sc3.equals(sc2)) {
+                            // System.out.println(String.valueOf(letterArr));
+                            System.out.println("Well done, the word was : " + str2);
+                            break;
+                        }
+                    } else {
+                        continue;
+                    }
                 } else {
+                    // for every failed attempt a part of the picture is drawn. //
+                    System.out.println("\n" + String.valueOf(letterArr) + "\n");
                     coutnFail++;
                     if (coutnFail == 1)
-                            System.out.print("---------\n");
+                        System.out.print("---------\n");
                     if (coutnFail == 2) {
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
                     }
                     if (coutnFail == 3) {
-                            System.out.print("---------\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
+                        System.out.print("---------\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
                     }
                     if (coutnFail == 4) {
-                            System.out.print("---------\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
+                        System.out.print("---------\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
                     }
                     if (coutnFail == 5) {
-                            System.out.print("---------\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         O\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
+                        System.out.print("---------\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         O\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
                     }
                     if (coutnFail == 6) {
-                            System.out.print("---------\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         O\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
+                        System.out.print("---------\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         O\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
                     }
                     if (coutnFail == 7) {
-                            System.out.print("---------\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         O\n");
-                            System.out.print("|       --|--\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
+                        System.out.print("---------\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         O\n");
+                        System.out.print("|       --|--\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
                     }
                     if (coutnFail == 8) {
-                            System.out.print("---------\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|         O\n");
-                            System.out.print("|       --|--\n");
-                            System.out.print("|         |\n");
-                            System.out.print("|        | |\n");
-                            System.out.print("|\n");
-                            System.out.print("|\n");
-                            System.out.print("---------\n");
-                            System.out.println("He's dead well done !");
-                            break;
+                        System.out.print("---------\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|         O\n");
+                        System.out.print("|       --|--\n");
+                        System.out.print("|         |\n");
+                        System.out.print("|        | |\n");
+                        System.out.print("|\n");
+                        System.out.print("|\n");
+                        System.out.print("---------\n");
+                        System.out.println("You failed !");
+                        break;
                     }
                 }
             } else {
@@ -165,8 +188,10 @@ public class Pendu extends Exception {
             }
         }
     }
+
     public static void main(String[] args) {
         Pendu p = new Pendu();
-        p.checkFail(args[0]);
+
+        p.hangMan("sessions");
     }
 }
