@@ -1,5 +1,6 @@
 # Pendu
 Pendu sans graphisme.
+Compilation dans le terminal via javac [filename.java] et executé via java [filemane].
 Ne prend pas de chiffres ni de caractères spéciaux.
 Il peut prendre les majuscules.
 Les lettres peuvent être données dans n'importe quelle ordre.
